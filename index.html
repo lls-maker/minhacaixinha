@@ -5,8 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Minha Caixinha de Reserva</title>
     
-    <!-- LINK PARA O MANIFEST EMBUTIDO (PWA EM UM ÚNICO ARQUIVO) -->
-    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIk1pbmhhIENhaXhpbmhhIGRlIFJlc2VydmEiLAogICJzaG9ydF9uYW1lIjogIkNhaXhpbmhhIiwKICAic3RhcnRfdXJsIjogIi4iLAogICJkaXNwbGF5IjogInN0YW5kYWxvbmUiLAogICJiYWNrZ3JvdW5kX2NvbG9yIjogIiNmMGZkZjQiLAogICJ0aGVtZV9jb2xvciI6ICIjMDU5NjY5IiwKICAib3JpZW50YXRpb24iOiAicG9ydHJhaXQiLAogICJpY29ucyI6IFsKICAgIHsKICAgICAgInNyYyI6ICJodHRwczovL2Nlbi1pY29ucy1wbmcuZmxhdGljb24uY29tLzUxMi8yNDg5LzI0ODk3NTYucG5nIiwKICAgICAgInNpemVzIjogIjUxMng1MTIiLAogICAgICAidHlwZSI6ICJpbWFnZS9wbmciCiAgICB9CiAgXQp9">
+    <!-- CONEXÃO COM O MANIFEST LOCAL -->
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/x-icon" href="logo.ico">
     <meta name="theme-color" content="#059669">
 
     <style>
@@ -131,7 +132,6 @@
 </div>
 
 <script>
-// 1. ALGORITMO FINANCEIRO DA CAIXINHA
 function calcularCaixinha() {
     const nome = document.getElementById('nome').value || 'Poupador';
     const objetivo = document.getElementById('objetivo').value || 'Minha Meta';
@@ -177,24 +177,11 @@ function calcularCaixinha() {
     `;
 }
 
-// 2. ATIVAÇÃO DO SERVICE WORKER (EM EMBUTIDO PARA RODAR OFFLINE)
+// Registro correto do Service Worker apontando para o arquivo local
 if ('serviceWorker' in navigator) {
-    // Código JavaScript embutido para criar o arquivo dinamicamente na execução
-    const swCode = `
-        const CACHE_NAME = 'caixinha-v1';
-        self.addEventListener('install', e => {
-            e.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(['.'])));
-        });
-        self.addEventListener('fetch', e => {
-            e.respondWith(caches.match(e.request).then(res => res || fetch(e.request)));
-        });
-    `;
-    const blob = new Blob([swCode], { type: 'application/javascript' });
-    const swUrl = URL.createObjectURL(blob);
-
-    navigator.serviceWorker.register(swUrl)
-        .then(() => console.log("PWA de Arquivo Único Conectado!"))
-        .catch(err => console.log("Nota: O PWA precisa rodar via localhost para ativação total. Erro:", err));
+    navigator.serviceWorker.register('sw.js')
+        .then(() => console.log("PWA Ativado localmente com sucesso!"))
+        .catch(err => console.log("Erro ao registrar PWA:", err));
 }
 </script>
 
