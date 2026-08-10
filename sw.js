@@ -1,18 +1,9 @@
-const CACHE_NAME = 'caixinha-v2';
+const CACHE_NAME = 'caixinha-cache-v2'; // <--- MUDE O NÚMERO AQUI PARA FORÇAR A ATUALIZAÇÃO
 const ASSETS = [
-  'index.html',
-  'manifest.json',
-  'logo.ico'
+  '/',
+  '/index.html',
+  '/manifest.json',
+  '/logo.ico'
 ];
 
-self.addEventListener('install', e => {
-    e.waitUntil(
-        caches.open(CACHE_NAME).then(cache => cache.addAll(ASSETS))
-    );
-});
-
-self.addEventListener('fetch', e => {
-    e.respondWith(
-        caches.match(e.request).then(response => response || fetch(e.request))
-    );
-});
+// O restante do seu código de Install, Activate e Fetch permanece igual...
